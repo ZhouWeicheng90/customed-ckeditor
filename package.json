@@ -1,9 +1,8 @@
 {
   "name": "lsbh-customed-ckeditor",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "",
-  "keywords": [   
-  ],
+  "keywords": [],
   "main": "./build/ckeditor.js",
   "files": [
     "build"
@@ -65,5 +64,8 @@
     "hooks": {
       "pre-commit": "lint-staged"
     }
+  },
+  "dependencies": {
+    "@ckeditor/ckeditor5-markdown-gfm": "^11.0.5"
   }
 }

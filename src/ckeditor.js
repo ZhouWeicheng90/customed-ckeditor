@@ -23,7 +23,7 @@ import ImageToolbar from '@ckeditor/ckeditor5-image/src/imagetoolbar';
 import ImageUpload from '@ckeditor/ckeditor5-image/src/imageupload';
 // import Link from '@ckeditor/ckeditor5-link/src/link';
 // import List from '@ckeditor/ckeditor5-list/src/list';
-// import MediaEmbed from '@ckeditor/ckeditor5-media-embed/src/mediaembed';
+import MediaEmbed from '@ckeditor/ckeditor5-media-embed/src/mediaembed';
 // import Paragraph from '@ckeditor/ckeditor5-paragraph/src/paragraph';
 // import PasteFromOffice from '@ckeditor/ckeditor5-paste-from-office/src/pastefromoffice';
 // import Table from '@ckeditor/ckeditor5-table/src/table';
@@ -31,8 +31,13 @@ import ImageUpload from '@ckeditor/ckeditor5-image/src/imageupload';
 
 // add custom plugin
 import Alignment from '@ckeditor/ckeditor5-alignment/src/alignment';
+import GFMDataProcessor from '@ckeditor/ckeditor5-markdown-gfm/src/gfmdataprocessor';
 
 import '../theme/theme.css';
+
+function Markdown( editor ) {
+    editor.data.processor = new GFMDataProcessor();
+}
 
 export default class BalloonEditor extends BalloonEditorBase {}
 
@@ -42,6 +47,7 @@ BalloonEditor.builtinPlugins = [
 	UploadAdapter,
 	// Autoformat,
 	BlockToolbar,
+	Markdown,   // 采用markdown输出
 	// Bold,
 	// Italic,
 	// BlockQuote,
@@ -55,12 +61,12 @@ BalloonEditor.builtinPlugins = [
 	ImageUpload,
 	// Link,
 	// List,
-	// MediaEmbed,
+	MediaEmbed,
 	// Paragraph,
 	// PasteFromOffice,
 	// Table,
 	// TableToolbar,
-	Alignment  //
+	Alignment //
 ];
 
 // Editor configuration.
@@ -68,14 +74,15 @@ BalloonEditor.defaultConfig = {
 	blockToolbar: [
 		'heading',
 		'|',
-		'alignment:left', 
+		'alignment:left',
 		'alignment:center',
-		'|',		
-		'imageUpload',				
+		'|',
+		'imageUpload',
 		'|',
 		'undo',
 		'redo',
-		
+		'mediaEmbed'
+
 	],
 	toolbar: {
 		// items: [
