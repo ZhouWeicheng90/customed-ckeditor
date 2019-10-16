@@ -31,13 +31,13 @@ import MediaEmbed from '@ckeditor/ckeditor5-media-embed/src/mediaembed';
 
 // add custom plugin
 import Alignment from '@ckeditor/ckeditor5-alignment/src/alignment';
-import GFMDataProcessor from '@ckeditor/ckeditor5-markdown-gfm/src/gfmdataprocessor';
+// import GFMDataProcessor from '@ckeditor/ckeditor5-markdown-gfm/src/gfmdataprocessor';
 
 import '../theme/theme.css';
 
-function Markdown( editor ) {
-    editor.data.processor = new GFMDataProcessor();
-}
+// function Markdown( editor ) {
+//     editor.data.processor = new GFMDataProcessor();
+// }
 
 export default class BalloonEditor extends BalloonEditorBase {}
 
@@ -47,7 +47,7 @@ BalloonEditor.builtinPlugins = [
 	UploadAdapter,
 	// Autoformat,
 	BlockToolbar,
-	Markdown,   // 采用markdown输出
+	// Markdown,   // 采用markdown输出
 	// Bold,
 	// Italic,
 	// BlockQuote,
