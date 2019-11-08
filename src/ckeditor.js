@@ -33,7 +33,9 @@ import MediaEmbed from '@ckeditor/ckeditor5-media-embed/src/mediaembed';
 import Alignment from '@ckeditor/ckeditor5-alignment/src/alignment';
 // import GFMDataProcessor from '@ckeditor/ckeditor5-markdown-gfm/src/gfmdataprocessor';
 
-import '../theme/theme.css';
+import './theme.css';
+
+import MyPlugin from './custom-plugin/plugin'
 
 // function Markdown( editor ) {
 //     editor.data.processor = new GFMDataProcessor();
@@ -51,17 +53,18 @@ BalloonEditor.builtinPlugins = [
 	// Bold,
 	// Italic,
 	// BlockQuote,
+	MyPlugin,
 	CKFinder,
-	EasyImage,
+	// EasyImage,
 	Heading,
-	Image,
-	ImageCaption,
-	ImageStyle,
-	ImageToolbar,
-	ImageUpload,
+	// Image,
+	// ImageCaption,
+	// ImageStyle,
+	// ImageToolbar,
+	// ImageUpload,
 	// Link,
 	// List,
-	MediaEmbed,
+	// MediaEmbed,
 	// Paragraph,
 	// PasteFromOffice,
 	// Table,
@@ -76,12 +79,14 @@ BalloonEditor.defaultConfig = {
 		'|',
 		'alignment:left',
 		'alignment:center',
-		'|',
-		'imageUpload',
+		// '|',
+		// 'imageUpload',
 		'|',
 		'undo',
 		'redo',
-		'mediaEmbed'
+		// 'mediaEmbed',
+		'|',
+		'insertImage'
 
 	],
 	toolbar: {
@@ -97,7 +102,12 @@ BalloonEditor.defaultConfig = {
 			'imageStyle:side',
 			'|',
 			'imageTextAlternative'
-		]
+		],
+		// converters:{
+		// 	viewFigureToModel(){
+		// 		console.log('12345')
+		// 	}
+		// }
 	},
 	// table: {
 	// 	contentToolbar: [
