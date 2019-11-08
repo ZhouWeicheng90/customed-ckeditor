@@ -3,7 +3,6 @@
   "version": "2.0.1",
   "description": "",
   "keywords": [],
-  "main": "./build/ckeditor.js",
   "files": [
     "build"
   ],
@@ -49,8 +48,8 @@
   "license": "GPL-2.0-or-later",
   "scripts": {
     "build": "webpack --mode production",
-    "lint": "eslint --quiet '**/*.js'",
-    "preversion": "npm run build; if [ -n \"$(git status src/ckeditor.js build/ --porcelain)\" ]; then git add -u src/ckeditor.js build/ && git commit -m 'Internal: Build.'; fi"
+    "watch": "webpack --watch",
+    "lint": "eslint --quiet '**/*.js'"
   },
   "lint-staged": {
     "**/*.js": [
@@ -62,10 +61,9 @@
     "packages/**"
   ],
   "husky": {
-    "hooks": {      
-    }
+    "hooks": {}
   },
   "dependencies": {
-    
+    "@ckeditor/ckeditor5-engine": "^15.0.0"
   }
 }
