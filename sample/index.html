@@ -31,59 +31,33 @@
 				options: [
 					{ model: 'paragraph', title: '正文', class: 'ck-heading_paragraph' },
 					{ model: 'heading1', view: 'h2', title: '标题1', class: 'ck-heading_heading1' },
-					// { model: 'heading2', view: 'h3', title: '标题2', class: 'ck-heading_heading2' },
-					// { model: 'heading3', view: 'h4', title: '标题3', class: 'ck-heading_heading3' }
+					{ model: 'heading2', view: 'h3', title: '标题2', class: 'ck-heading_heading2' },
+					{ model: 'heading3', view: 'h4', title: '标题3', class: 'ck-heading_heading3' }
 				]
 			},
-			insertImg: {
-				options: [{ model: 'paragrh', title: '正x文', class: 'ck-heading_paragraph' },
-				{ model: 'headi1', view: 'h2', title: '标x题1', class: 'ck-heading_heading1' },
-				{ model: 'headi2', view: 'h3', title: '标x题2', class: 'ck-heading_heading2' },
-				{ model: 'headi3', view: 'h4', title: '标x题3', class: 'ck-heading_heading3' }]
+			imgMarks: {
+				options: [
+					{ sizeStr: '100*100' },
+					{ sizeStr: '200*200' },
+					{ sizeStr: '300*300' },
+					{ sizeStr: '400*400' },
+					{ sizeStr: '500*500' },
+				],
+				resovleFn(selectSizeStr) {
+					return new Promise(resolve => {
+						resolve({
+							size: selectSizeStr,
+							no: 1,
+							description: '这是一张u图片！'
+						})
+					})
+				}
 			}
-			// cloudServices: {
-			//     tokenUrl: 'https://example.com/cs-token-endpoint',
-			//     uploadUrl: 'https://your-organization-id.cke-cs.com/easyimage/upload/'
-			// }
-			// mediaEmbed:{
-			// 	extraProviders:[{
-			// 		name:'baiduPic',
-			// 		url:/^ss0\.bdstatic\.com.*/,//'https://ss0.bdstatic.com/70cFvHSh_Q1YnxGkpoWK1HF6hhy/it/u=1551039200,1108067788&fm=26&gp=0.jpg',
-			// 		html:match=>'...'
-			// 	}]
-			// }
-		})
-			.then(editor => {
-				 
-				// editor.execute('imageStyle', { value: 'side' })
-				window.editor = editor;
-				// console.log(editor.conversion)
-				// editor.conversion.for('downcast').add(dispatcher => {
-				// 	dispatcher.on('insertContent', (evt, data, conversionApi) => {
-				// 		console.log('nnn')
-				// 		// const viewWriter = conversionApi.writer;
-				// 		// const viewSelection = viewWriter.document.selection;
-
-				// 		// // Adding a new CSS class is done by wrapping all link ranges and selection
-				// 		// // in a new attribute element with a class.
-				// 		// const viewElement = viewWriter.createAttributeElement('a', {
-				// 		// 	class: 'my-green-link'
-				// 		// }, {
-				// 		// 	priority: 5
-				// 		// });
-
-				// 		// if (data.item.is('selection')) {
-				// 		// 	viewWriter.wrap(viewSelection.getFirstRange(), viewElement);
-				// 		// } else {
-				// 		// 	viewWriter.wrap(conversionApi.mapper.toViewRange(data.range), viewElement);
-				// 		// }
-				// 	});
-				// });
-			})
-			.catch(err => {
-				console.error(err.stack);
-			});
-
+		}).then(editor => {
+			window.editor = editor;
+		}).catch(err => {
+			console.error(err.stack);
+		});
 		function printFn() {
 			let data = window.editor.getData()
 			console.log(data)

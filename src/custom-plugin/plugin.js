@@ -1,81 +1,104 @@
 import Plugin from '@ckeditor/ckeditor5-core/src/plugin'
-import ButtonView from '@ckeditor/ckeditor5-ui/src/button/buttonview'
+
+import { createDropdown, addListToDropdown } from '@ckeditor/ckeditor5-ui/src/dropdown/utils';
+import Collection from '@ckeditor/ckeditor5-utils/src/collection';
+import Model from '@ckeditor/ckeditor5-ui/src/model';
+import imageIcon from '@ckeditor/ckeditor5-core/theme/icons/image.svg';
 // import HtmlDataProcessor from '@ckeditor/ckeditor5-engine/src'
-import * as converters from '@ckeditor/ckeditor5-image/src/image/converters'
-export default class InsertImage extends Plugin {
+// import * as converters from '@ckeditor/ckeditor5-image/src/image/converters'
+export default class extends Plugin {
     init() {
 
         const editor = this.editor
+        const t = editor.t
 
-        editor.model.schema.register('imgT', {
-            inheritAllFrom: '$text',
-            allowAttributes: ['alt', 'src']
-        });
-        editor.conversion.elementToElement({ model: 'imgT', view: 'img' })
-        editor.conversion.attributeToAttribute({
-            view: 'alt'
-            ,
-            model: 'alt'
-        })
-        editor.conversion.attributeToAttribute({
-            view: 'src'
-            ,
-            model: 'src'
-        });
-        // const options = editor.config.get('insertImg.options');
-        // const modelElements = [];
+        // editor.model.schema.register('imgT', {
+        //     inheritAllFrom: '$text',
+        //     allowAttributes: ['alt', 'src']
+        // });
+        // editor.data.upcastDispatcher.on('element:img', (evt, data, conversionApi) => {
+        //     console.log('hello!')
+        //     const { modelRange } = conversionApi.convertChildren(data.viewItem, data.modelCursor);
 
-        // for (const option of options) {
-        // //     // Skip paragraph - it is defined in required Paragraph feature.
+        //     for (let item of modelRange.getItems()) {
+        //         if (conversionApi.schema.checkAttribute(item, 'src')) {
+        //             conversionApi.writer.setAttribute('src', data.viewItem.getAttribute('src'), item);
+        //         }
+        //     }
 
-        // //     // Schema.
-        // //     editor.model.schema.register(option.model, {
-        // //         inheritAllFrom: '$block'
-        // //     });
-
-        // //     editor.conversion.elementToElement(option);
-
-        // //     modelElements.push(option.model);
-        // //     // this._addDefaultH1Conversion(editor);
-
-        // //     // Register the heading command for this option.
-        // //     editor.commands.add('heading', new HeadingCommand(editor, modelElements));
-
-        // }
+        // }, { priority: 'low' });
+        // editor.conversion.elementToElement({ model: 'imgT', view: 'img' })
+        // editor.conversion.attributeToAttribute({
+        //     view: 'alt', model: 'alt'
+        // })
+        // editor.conversion.attributeToAttribute({
+        //     view: 'src', model: 'src'
+        // });
 
 
 
-
-
-
-        editor.ui.componentFactory.add('insertImage', locale => {
-            let view = new ButtonView(locale)
-            view.set({
-                label: 'inset here',
+        editor.ui.componentFactory.add('imgMarks', locale => {
+            const dropdownView = createDropdown(locale);
+            dropdownView.buttonView.set({
+                label: t('imgMarks'),
+                icon: imageIcon,
                 tooltip: true
             });
-            view.on('execute', () => {
-                // console.log('=1=')
-                // 三种方式插入图片：
-                // editor.model.change(writer => {
-                //     const imageElement = writer.createElement('image', {
-                //         src: "https://pic.qqtn.com/up/2018-5/15257448141370755.jpg"
-                //     });
-                //     console.log(imageElement)
-                //     editor.model.insertContent(imageElement, editor.model.document.selection);
-                // })
+
+            const itemDefinitions = new Collection();
+            const conf = editor.config.get('imgMarks');
+            for (const option of conf.options) {
+                const def = {
+                    type: 'button',
+                    model: new Model({
+                        label: option.sizeStr,
+                        withText: true,
+                        val: option.sizeStr
+                    })
+                };
+                itemDefinitions.add(def)
+            }
+            this.listenTo(dropdownView, 'execute', evt => {
+                if (typeof conf.resovleFn === 'function') {
+                    conf.resovleFn(evt.source.val).then(info => {
+                        let txt = `![${info.no}#${info.description}](size:${info.size})`
+                        writeTxt(txt)
+                    })
+                } else {
+                    let txt = evt.source.val;
+                    writeTxt(txt)
+                }
+            });
+
+            function writeTxt(txt) {
+                editor.model.change(writer => {
+                    editor.model.insertContent(writer.createText(txt));
+                })
+            }
+
+            addListToDropdown(dropdownView, itemDefinitions);
+            // view.on('execute', () => {
+            //     // console.log('=1=')
+            //     // 三种方式插入图片：
+            //     // editor.model.change(writer => {
+            //     //     const imageElement = writer.createElement('image', {
+            //     //         src: "https://pic.qqtn.com/up/2018-5/15257448141370755.jpg"
+            //     //     });
+            //     //     console.log(imageElement)
+            //     //     editor.model.insertContent(imageElement, editor.model.document.selection);
+            //     // })
 
 
-                const viewFragment = editor.data.processor.toView(`<img src="https://pic.qqtn.com/up/2018-5/15257448141370755.jpg">`)
-                console.log(JSON.stringify(viewFragment))
-                const modelFragment = editor.data.toModel(viewFragment);
-                console.log(JSON.stringify(modelFragment))
-                editor.model.insertContent(modelFragment);
+            //     const viewFragment = editor.data.processor.toView(`<img src="https://pic.qqtn.com/up/2018-5/15257448141370755.jpg">`)
+            //     console.log(JSON.stringify(viewFragment))
+            //     const modelFragment = editor.data.toModel(viewFragment);
+            //     console.log(JSON.stringify(modelFragment))
+            //     editor.model.insertContent(modelFragment);
 
-                // editor.execute('imageInsert',{source:'https://pic.qqtn.com/up/2018-5/15257448141370755.jpg'})
+            //     // editor.execute('imageInsert',{source:'https://pic.qqtn.com/up/2018-5/15257448141370755.jpg'})
 
-            })
-            return view;
+            // })
+            return dropdownView;
         })
     }
 }
