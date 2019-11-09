@@ -16,8 +16,8 @@ import BlockToolbar from '@ckeditor/ckeditor5-ui/src/toolbar/block/blocktoolbar'
 // import CKFinder from '@ckeditor/ckeditor5-ckfinder/src/ckfinder';
 // import EasyImage from '@ckeditor/ckeditor5-easy-image/src/easyimage';
 import Heading from '@ckeditor/ckeditor5-heading/src/heading';
-// import Image from '@ckeditor/ckeditor5-image/src/image';
-// import ImageCaption from '@ckeditor/ckeditor5-image/src/imagecaption';
+import Image from '@ckeditor/ckeditor5-image/src/image';
+import ImageCaption from '@ckeditor/ckeditor5-image/src/imagecaption';
 // import ImageStyle from '@ckeditor/ckeditor5-image/src/imagestyle';
 // import ImageToolbar from '@ckeditor/ckeditor5-image/src/imagetoolbar';
 // import ImageUpload from '@ckeditor/ckeditor5-image/src/imageupload';
@@ -57,8 +57,8 @@ BalloonEditor.builtinPlugins = [
 	// CKFinder,
 	// EasyImage,
 	Heading,
-	// Image,
-	// ImageCaption,
+	Image,
+	ImageCaption,  //可以往图片里面添加caption
 	// ImageStyle,
 	// ImageToolbar,
 	// ImageUpload,
@@ -97,12 +97,12 @@ BalloonEditor.defaultConfig = {
 	// 	// ]
 	// },
 	// image: {
-	// 	toolbar: [
+		// toolbar: [
 	// 		'imageStyle:full',
 	// 		'imageStyle:side',
 	// 		'|',
-	// 		'imageTextAlternative'
-	// 	],
+			// 'imageTextAlternative'
+		// ],
 	// 	// converters:{
 	// 	// 	viewFigureToModel(){
 	// 	// 		console.log('12345')

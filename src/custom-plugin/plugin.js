@@ -52,28 +52,35 @@ export default class extends Plugin {
                     type: 'button',
                     model: new Model({
                         label: option.sizeStr,
-                        withText: true,
-                        val: option.sizeStr
+                        withText: true
                     })
                 };
                 itemDefinitions.add(def)
             }
             this.listenTo(dropdownView, 'execute', evt => {
-                if (typeof conf.resovleFn === 'function') {
-                    conf.resovleFn(evt.source.val).then(info => {
-                        let txt = `![${info.no}#${info.description}](size:${info.size})`
-                        writeTxt(txt)
+                let sizeStr = evt.source.label;
+                if (typeof conf.resolveFn === 'function') {
+                    conf.resolveFn(sizeStr).then(html => {
+                        const viewFragment = editor.data.processor.toView(html)
+                        const modelFragment = editor.data.toModel(viewFragment);
+                        editor.model.insertContent(modelFragment);
                     })
                 } else {
-                    let txt = evt.source.val;
-                    writeTxt(txt)
+                    console.error('imgMarks config must provide a "resolveFn" and promise a html string')
                 }
             });
 
-            function writeTxt(txt) {
+            function insertMark(url) {
                 editor.model.change(writer => {
-                    editor.model.insertContent(writer.createText(txt));
+                    const imageElement = writer.createElement('image', {
+                        src: url
+                    });
+                    console.log(JSON.stringify(imageElement))
+                    editor.model.insertContent(imageElement, editor.model.document.selection);
+
+                    //     editor.model.insertContent(writer.createText(txt));
                 })
+                // editor.execute('imageInsert',{source:url,caption:'nihao'})
             }
 
             addListToDropdown(dropdownView, itemDefinitions);
@@ -89,11 +96,11 @@ export default class extends Plugin {
             //     // })
 
 
-            //     const viewFragment = editor.data.processor.toView(`<img src="https://pic.qqtn.com/up/2018-5/15257448141370755.jpg">`)
-            //     console.log(JSON.stringify(viewFragment))
-            //     const modelFragment = editor.data.toModel(viewFragment);
-            //     console.log(JSON.stringify(modelFragment))
-            //     editor.model.insertContent(modelFragment);
+            // const viewFragment = editor.data.processor.toView(`<img src="https://pic.qqtn.com/up/2018-5/15257448141370755.jpg">`)
+            // console.log(JSON.stringify(viewFragment))
+            // const modelFragment = editor.data.toModel(viewFragment);
+            // console.log(JSON.stringify(modelFragment))
+            // editor.model.insertContent(modelFragment);
 
             //     // editor.execute('imageInsert',{source:'https://pic.qqtn.com/up/2018-5/15257448141370755.jpg'})
 
