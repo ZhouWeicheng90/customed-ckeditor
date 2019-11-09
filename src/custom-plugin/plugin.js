@@ -39,14 +39,13 @@ export default class extends Plugin {
 
         editor.ui.componentFactory.add('imgMarks', locale => {
             const dropdownView = createDropdown(locale);
+            const conf = editor.config.get('imgMarks');
+            const itemDefinitions = new Collection();
             dropdownView.buttonView.set({
-                label: t('imgMarks'),
+                label: t(conf.label || 'imgMarks'),
                 icon: imageIcon,
                 tooltip: true
             });
-
-            const itemDefinitions = new Collection();
-            const conf = editor.config.get('imgMarks');
             for (const option of conf.options) {
                 const def = {
                     type: 'button',
@@ -60,7 +59,8 @@ export default class extends Plugin {
             this.listenTo(dropdownView, 'execute', evt => {
                 let sizeStr = evt.source.label;
                 if (typeof conf.resolveFn === 'function') {
-                    conf.resolveFn(sizeStr).then(html => {
+                    let resolveFn = conf.resolveFn
+                    resolveFn(sizeStr).then(html => {
                         const viewFragment = editor.data.processor.toView(html)
                         const modelFragment = editor.data.toModel(viewFragment);
                         editor.model.insertContent(modelFragment);
@@ -69,42 +69,7 @@ export default class extends Plugin {
                     console.error('imgMarks config must provide a "resolveFn" and promise a html string')
                 }
             });
-
-            function insertMark(url) {
-                editor.model.change(writer => {
-                    const imageElement = writer.createElement('image', {
-                        src: url
-                    });
-                    console.log(JSON.stringify(imageElement))
-                    editor.model.insertContent(imageElement, editor.model.document.selection);
-
-                    //     editor.model.insertContent(writer.createText(txt));
-                })
-                // editor.execute('imageInsert',{source:url,caption:'nihao'})
-            }
-
             addListToDropdown(dropdownView, itemDefinitions);
-            // view.on('execute', () => {
-            //     // console.log('=1=')
-            //     // 三种方式插入图片：
-            //     // editor.model.change(writer => {
-            //     //     const imageElement = writer.createElement('image', {
-            //     //         src: "https://pic.qqtn.com/up/2018-5/15257448141370755.jpg"
-            //     //     });
-            //     //     console.log(imageElement)
-            //     //     editor.model.insertContent(imageElement, editor.model.document.selection);
-            //     // })
-
-
-            // const viewFragment = editor.data.processor.toView(`<img src="https://pic.qqtn.com/up/2018-5/15257448141370755.jpg">`)
-            // console.log(JSON.stringify(viewFragment))
-            // const modelFragment = editor.data.toModel(viewFragment);
-            // console.log(JSON.stringify(modelFragment))
-            // editor.model.insertContent(modelFragment);
-
-            //     // editor.execute('imageInsert',{source:'https://pic.qqtn.com/up/2018-5/15257448141370755.jpg'})
-
-            // })
             return dropdownView;
         })
     }
